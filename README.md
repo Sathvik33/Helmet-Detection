@@ -10,12 +10,13 @@ A computer vision application that detects whether riders are wearing helmets, u
 
 | Feature | Status |
 |---|---|
+| Streamlit interactive web frontend (Photo & Video Live/Upload) | ✅ Implemented |
 | YOLOv8-Nano fine-tuning on custom helmet dataset | ✅ Implemented |
 | Single image detection with annotated output | ✅ Implemented |
 | Recorded video detection with FPS overlay | ✅ Implemented |
 | Real-time webcam detection | ✅ Implemented |
 | Compliance statistics (helmet/no-helmet counts, %) | ✅ Implemented |
-| Rider tracking with BoT-SORT | ✅ Implemented |
+| Rider tracking with BoT-SORT / ByteTrack | ✅ Implemented |
 | Violation CSV logging with deduplication | ✅ Implemented |
 | GPU + CPU support | ✅ Implemented |
 
@@ -49,6 +50,7 @@ A computer vision application that detects whether riders are wearing helmets, u
 
 ```
 Helmet_detection/
+├── app.py                      # Streamlit interactive web application
 ├── Data/                       # Dataset (Roboflow export)
 │   ├── data.yaml               # Dataset config (abs paths)
 │   ├── train/images/ & labels/ # 3,548 training images
@@ -57,6 +59,7 @@ Helmet_detection/
 ├── models/
 │   └── best.pt                 # Fine-tuned checkpoint
 ├── src/
+│   ├── ui_helpers.py           # Streamlit UI annotation & video conversion helpers
 │   ├── train.py                # Training script
 │   ├── evaluate.py             # Test-set evaluation
 │   ├── detect_image.py         # Single image inference
@@ -107,6 +110,19 @@ pip install -r requirements.txt
 ---
 
 ## 🚀 Usage
+
+### 0. Launch the Interactive Web App (Streamlit Frontend)
+
+```bash
+streamlit run app.py
+```
+
+The web application opens at `http://localhost:8501` featuring:
+- 🖼️ **Upload Photo**: Upload custom photos or select from test dataset samples. Displays bounding boxes, confidence scores, compliance percentage, detections breakdown table, and download option.
+- 📸 **Live Photo (Camera)**: Capture instant snapshots with browser camera/webcam and run detection immediately.
+- 🎞️ **Upload Video**: Process MP4/AVI/MOV/MKV videos with optional ByteTrack object tracking, frame stride speedup, real-time preview, browser video player, and downloadable violation CSV logs.
+- 📹 **Live Video (Webcam)**: Real-time live camera feed with on-screen HUD, FPS counter, compliance metrics, and interactive start/stop toggle.
+- ⚙️ **Customizable Controls**: Switch between fine-tuned checkpoints, adjust confidence/IoU sliders, and customize visual overlays on the fly.
 
 ### 1. Train the Model
 
