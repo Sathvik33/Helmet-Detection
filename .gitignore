@@ -1,0 +1,28 @@
+# Model weights
+*.pt
+models/*.pt
+
+# Training runs
+runs/
+
+# Data (too large for git)
+Data/train/
+Data/valid/
+Data/test/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Results (optional - may want to keep)
+results/*.mp4
+results/*.avi
+results/*.jpg
+results/*.png

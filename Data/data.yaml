@@ -1,0 +1,15 @@
+path: c:/Sathvik-py/AI/Gen_AI/Helmet_detection/Data
+
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 2
+names: ['With Helmet', 'Without Helmet']
+
+roboflow:
+  workspace: bicycle-helemt
+  project: bike-helmet-detection-2vdjo-qkthu
+  version: 1
+  license: Public Domain
+  url: https://universe.roboflow.com/bicycle-helemt/bike-helmet-detection-2vdjo-qkthu/dataset/1
