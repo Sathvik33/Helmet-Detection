@@ -150,6 +150,37 @@ Options:
 python src/evaluate.py --model models/best.pt --conf 0.25
 ```
 
+---
+
+## 📈 Evaluation Metrics
+
+The system uses standard Computer Vision object detection metrics defined by Ultralytics YOLOv8 and COCO benchmarks, evaluated on the held-out test split (64 images, 187 annotated instances):
+
+### 1. Primary Metrics
+- **Precision (P / mp)**: Proportion of detected bounding boxes that are true positives.
+  $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
+  *Measures how clean and reliable the predictions are (low false alarms).*
+- **Recall (R / mr)**: Proportion of actual ground-truth objects correctly identified by the model.
+  $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+  *Measures completeness (how few helmet/non-helmet riders are missed).*
+- **mAP@0.5 (Mean Average Precision at IoU = 0.50)**: Area under the Precision-Recall curve at an Intersection over Union (IoU) overlap threshold of 0.50. This is the primary benchmark for helmet detection readiness.
+- **mAP@0.5:0.95**: Stricter benchmark averaging mAP across 10 IoU thresholds from 0.50 to 0.95 in 0.05 increments. Measures localization accuracy and bounding box tightness.
+- **Confusion Matrix**: Quantitative breakdown of True Positives, False Positives (background classified as rider/helmet), False Negatives (missed riders), and Inter-class Confusion (misclassifying *With Helmet* as *Without Helmet* or vice-versa).
+- **Inference Latency & FPS**: End-to-end processing speed decomposed into preprocessing, model inference, and NMS postprocessing time (measured in milliseconds per frame).
+
+### 2. Test Set Performance Summary (`models/best.pt`)
+
+| Class | Instances | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
+|---|---|---|---|---|---|
+| **All Classes (Overall)** | **187** | **85.9%** (0.859) | **68.1%** (0.681) | **79.7%** (0.797) | **49.2%** (0.492) |
+| `With Helmet` (Class 0) | 124 | **92.7%** (0.927) | **82.3%** (0.823) | **90.2%** (0.902) | **60.1%** (0.601) |
+| `Without Helmet` (Class 1) | 63 | **79.1%** (0.791) | **54.0%** (0.540) | **69.2%** (0.692) | **38.3%** (0.383) |
+
+- **Inference Speed**: ~4.1 ms forward pass (~85–120 FPS on RTX 4060 GPU with preprocessing & postprocessing included).
+- **False Positive Analysis**: `Without Helmet` has a lower recall (54.0%) compared to `With Helmet` (82.3%), showing that unhelmeted heads in complex or distant backgrounds are more prone to misses. Always review `runs/detect/helmet_eval_test/confusion_matrix.png` before drawing conclusions.
+
+---
+
 ### 3. Detect in Images
 
 ```bash
